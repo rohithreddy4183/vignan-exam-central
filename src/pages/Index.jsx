@@ -1,8 +1,7 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import LoginForm from "@/components/auth/LoginForm";
-import { BookOpen, Users, FileText, Calendar } from "lucide-react";
+import { BookOpen, Users, FileText, Calendar, Upload } from "lucide-react";
 
 const Index = () => {
   const [showLogin, setShowLogin] = useState(false);
