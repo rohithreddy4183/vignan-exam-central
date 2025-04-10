@@ -1,198 +1,92 @@
 
-import { useState } from "react";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const LoginForm = () => {
-  const [credentials, setCredentials] = useState({
-    username: "",
-    password: "",
-  });
-  const [showPassword, setShowPassword] = useState(false);
-  const [isFirstLogin, setIsFirstLogin] = useState(false);
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // Mock login logic - in a real app, this would connect to your backend
-    const mockAdminCredentials = { username: "admin", password: "admin123" };
-    const mockStudentCredentials = { username: "21BCE7777", password: "student123" };
-    
-    if (credentials.username === mockAdminCredentials.username && 
-        credentials.password === mockAdminCredentials.password) {
-      // Successful admin login
-      localStorage.setItem("userRole", "admin");
-      localStorage.setItem("isAuthenticated", "true");
-      toast.success("Login successful");
-      navigate("/admin/dashboard");
-    } else if (credentials.username === mockStudentCredentials.username && 
-        credentials.password === mockStudentCredentials.password) {
-      // Successful student login
+    try {
+      const result = await login(username, password);
       
-      // Check if this is first login (in a real app, this would come from backend)
-      const isFirstTimeLogin = true;
-      if (isFirstTimeLogin) {
-        setIsFirstLogin(true);
+      if (result.success) {
+        toast.success('Login successful!');
+        
+        if (result.user.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else if (result.user.role === 'student') {
+          navigate('/student/dashboard');
+        }
       } else {
-        localStorage.setItem("userRole", "student");
-        localStorage.setItem("isAuthenticated", "true");
-        toast.success("Login successful");
-        navigate("/student/dashboard");
+        toast.error(result.message || 'Login failed');
       }
-    } else {
-      toast.error("Invalid credentials");
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('An unexpected error occurred');
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    
-    if (newPassword.length < 8) {
-      toast.error("Password must be at least 8 characters");
-      return;
-    }
-    
-    if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
-      return;
-    }
-    
-    // In a real app, send this to your backend
-    localStorage.setItem("userRole", "student");
-    localStorage.setItem("isAuthenticated", "true");
-    toast.success("Password changed successfully");
-    navigate("/student/dashboard");
-  };
-
-  if (isFirstLogin) {
-    return (
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl">Change Password</CardTitle>
-          <CardDescription>
-            This is your first login. Please change your password to continue.
-          </CardDescription>
-        </CardHeader>
-        <form onSubmit={handlePasswordChange}>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="newPassword" className="text-sm font-medium">
-                New Password
-              </label>
-              <div className="relative">
-                <Input
-                  id="newPassword"
-                  type={showPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  className="pr-10"
-                  placeholder="Enter your new password"
-                  required
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOffIcon className="h-5 w-5 text-gray-500" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-500" />
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="confirmPassword" className="text-sm font-medium">
-                Confirm Password
-              </label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your new password"
-                required
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full bg-vignan-blue hover:bg-blue-800">
-              Change Password
-            </Button>
-          </CardFooter>
-        </form>
-      </Card>
-    );
-  }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
+    <Card className="w-full max-w-md mx-auto shadow-md">
+      <CardHeader className="space-y-1">
+        <CardTitle className="text-2xl text-center font-bold text-[#1a98e6]">Login</CardTitle>
+        <CardDescription className="text-center">
           Enter your credentials to access your account
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="username" className="text-sm font-medium">
-              Username / Registration Number
-            </label>
+            <Label htmlFor="username">Username</Label>
             <Input
               id="username"
-              name="username"
-              value={credentials.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
+              placeholder="Username or Registration Number"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              Password
-            </label>
-            <div className="relative">
-              <Input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                value={credentials.password}
-                onChange={handleChange}
-                className="pr-10"
-                placeholder="Enter your password"
-                required
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOffIcon className="h-5 w-5 text-gray-500" />
-                ) : (
-                  <EyeIcon className="h-5 w-5 text-gray-500" />
-                )}
-              </button>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Password</Label>
+              <a href="#" className="text-xs text-[#1a98e6] hover:underline">
+                Forgot password?
+              </a>
             </div>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="text-xs text-muted-foreground">
+            <p>Sample Credentials:</p>
+            <p>Admin: username "admin", password "admin123"</p>
+            <p>Student: username "21BCE7777", password "student123"</p>
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full bg-vignan-blue hover:bg-blue-800">
-            Sign In
+          <Button type="submit" className="w-full btn-sky" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
         </CardFooter>
       </form>

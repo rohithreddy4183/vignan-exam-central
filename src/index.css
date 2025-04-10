@@ -14,16 +14,17 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 217 71% 23%;
+    /* Updated primary color to sky blue */
+    --primary: 199 89% 48%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 42 85% 62%;
+    --secondary: 199 89% 48%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 187 53% 33%;
+    --accent: 199 89% 48%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -46,16 +47,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 199 89% 48%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 42 85% 62%;
+    --secondary: 199 89% 48%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 187 53% 33%;
+    --accent: 199 89% 48%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -73,5 +74,47 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .sidebar {
+    @apply fixed top-0 left-0 h-screen bg-[#1a98e6] text-white transition-all duration-300 ease-in-out z-50 shadow-lg;
+  }
+  
+  .sidebar-collapsed {
+    @apply w-16;
+  }
+  
+  .sidebar-expanded {
+    @apply w-64;
+  }
+  
+  .content-with-sidebar {
+    @apply transition-all duration-300 ease-in-out ml-16;
+  }
+  
+  .content-with-sidebar-expanded {
+    @apply ml-64;
+  }
+  
+  .menu-trigger {
+    @apply fixed top-4 left-4 z-50 bg-[#1a98e6] text-white p-3 rounded-full shadow-lg hover:bg-[#0e86d4] transition-all;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-xl hover:bg-sky-50;
+  }
+  
+  .btn-sky {
+    @apply bg-[#1a98e6] hover:bg-[#0e86d4] text-white;
+  }
+  
+  .gradient-bg {
+    @apply bg-gradient-to-br from-[#1a98e6] to-[#0e86d4];
+  }
+  
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
   }
 }
