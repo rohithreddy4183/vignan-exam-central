@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Download, Trash2, Filter, Search, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -93,9 +94,11 @@ const QuestionsPage = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-800">Assessment Questions</h2>
-        <Button className="bg-[#33C3F0] hover:bg-[#1eaddc]">
-          Upload New Question
-        </Button>
+        <Link to="/faculty/upload">
+          <Button className="bg-[#33C3F0] hover:bg-[#1eaddc]">
+            Upload New Question
+          </Button>
+        </Link>
       </div>
       
       {/* Filter and Search */}
