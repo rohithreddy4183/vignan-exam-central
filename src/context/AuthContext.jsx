@@ -12,44 +12,35 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in from localStorage
     const isAuthenticated = localStorage.getItem('isAuthenticated');
     const userRole = localStorage.getItem('userRole');
-    const userData = localStorage.getItem('userData');
     
     if (isAuthenticated && userRole) {
-      try {
-        // Try to parse user data from localStorage if it exists
-        const parsedUserData = userData ? JSON.parse(userData) : null;
-        
-        // In a real app, we would validate the token with the server
-        if (userRole === 'admin') {
-          setUser(parsedUserData || {
-            id: 'admin-1',
-            name: 'Admin User',
-            role: 'admin',
-          });
-        } else if (userRole === 'faculty') {
-          setUser(parsedUserData || {
-            id: 'faculty-1',
-            name: 'Dr. Smith',
-            role: 'faculty',
-            facultyId: 'FAC2023001',
-            department: 'Computer Science',
-            subjects: ['Web Technologies', 'Database Systems'],
-            classes: ['CSE-A', 'CSE-B']
-          });
-        } else if (userRole === 'student') {
-          setUser(parsedUserData || {
-            id: 'student-1',
-            name: 'John Doe',
-            role: 'student',
-            regNumber: '21BCE7777',
-            class: 'CSE-A',
-            group: 'Group A-3'
-          });
-        }
-      } catch (error) {
-        console.error('Error parsing user data:', error);
-        // Clear potentially corrupted data
-        localStorage.removeItem('userData');
+      // In a real app, we would validate the token with the server
+      // For now, we'll just set a mock user based on the role
+      if (userRole === 'admin') {
+        setUser({
+          id: 'admin-1',
+          name: 'Admin User',
+          role: 'admin',
+        });
+      } else if (userRole === 'faculty') {
+        setUser({
+          id: 'faculty-1',
+          name: 'Dr. Smith',
+          role: 'faculty',
+          facultyId: 'FAC2023001',
+          department: 'Computer Science',
+          subjects: ['Web Technologies', 'Database Systems'],
+          classes: ['CSE-A', 'CSE-B']
+        });
+      } else if (userRole === 'student') {
+        setUser({
+          id: 'student-1',
+          name: 'John Doe',
+          role: 'student',
+          regNumber: '21BCE7777',
+          class: 'CSE-A',
+          group: 'Group A-3'
+        });
       }
     }
     
@@ -71,7 +62,6 @@ export const AuthProvider = ({ children }) => {
         
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', 'admin');
-        localStorage.setItem('userData', JSON.stringify(user));
         setUser(user);
         return { success: true, user };
         
@@ -88,7 +78,6 @@ export const AuthProvider = ({ children }) => {
         
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', 'faculty');
-        localStorage.setItem('userData', JSON.stringify(user));
         setUser(user);
         return { success: true, user };
         
@@ -104,7 +93,6 @@ export const AuthProvider = ({ children }) => {
         
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', 'student');
-        localStorage.setItem('userData', JSON.stringify(user));
         setUser(user);
         return { success: true, user };
         
@@ -122,7 +110,6 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('userRole');
-    localStorage.removeItem('userData');
     setUser(null);
   };
   

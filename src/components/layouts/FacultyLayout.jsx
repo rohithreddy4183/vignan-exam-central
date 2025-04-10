@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Outlet, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -19,13 +19,6 @@ const FacultyLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Protect the route
-    if (!user || user.role !== 'faculty') {
-      navigate('/');
-    }
-  }, [user, navigate]);
-
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
@@ -36,8 +29,9 @@ const FacultyLayout = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
-  // If not authenticated as faculty, return null (the useEffect will handle redirect)
+  // Protect the route
   if (!user || user.role !== 'faculty') {
+    navigate('/');
     return null;
   }
 
