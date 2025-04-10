@@ -95,7 +95,7 @@ const AssessmentDetails = () => {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">
-            <span className="bg-vignan-blue text-white text-sm px-2 py-1 rounded mr-2">
+            <span className="bg-[#33C3F0] text-white text-sm px-2 py-1 rounded mr-2">
               {assessment.type}
             </span>
             {assessment.subject}
@@ -173,7 +173,7 @@ const AssessmentDetails = () => {
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="submit">
+                  <Button type="submit" className="btn-sky">
                     <Upload className="h-4 w-4 mr-2" /> Submit Assignment
                   </Button>
                 </div>

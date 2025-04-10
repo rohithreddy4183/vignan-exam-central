@@ -66,10 +66,10 @@ export default {
 					900: '#0c4a6e',
 				},
 				vignan: {
-					blue: '#1a98e6',
+					blue: '#33C3F0', // Updated to skyblue
 					gold: '#f0c14b',
 					teal: '#2c7a7b',
-					lightgray: '#f7fafc',
+					lightgray: '#FFFFFF', // Updated to pure white
 					darkgray: '#4a5568'
 				}
 			},

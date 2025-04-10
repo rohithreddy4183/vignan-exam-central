@@ -77,7 +77,7 @@ const StudentDashboard = () => {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#1a98e6]">Student Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#33C3F0]">Student Dashboard</h1>
           <p className="text-muted-foreground">
             Welcome, {student.name}
           </p>
@@ -91,7 +91,7 @@ const StudentDashboard = () => {
       <div className="grid gap-6 md:grid-cols-7">
         <Card className="col-span-4 card-hover shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-[#1a98e6]">My Information</CardTitle>
+            <CardTitle className="text-[#33C3F0]">My Information</CardTitle>
             <CardDescription>Your academic details</CardDescription>
           </CardHeader>
           <CardContent>
@@ -118,14 +118,14 @@ const StudentDashboard = () => {
         
         <Card className="col-span-3 card-hover shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-[#1a98e6]">My Group</CardTitle>
+            <CardTitle className="text-[#33C3F0]">My Group</CardTitle>
             <CardDescription>Group members</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {student.groupMembers.map((member, index) => (
                 <div key={index} className="flex items-center bg-white p-2 rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-[#1a98e6] text-white flex items-center justify-center mr-3">
+                  <div className="w-8 h-8 rounded-full bg-[#33C3F0] text-white flex items-center justify-center mr-3">
                     {member.charAt(0)}
                   </div>
                   <p>{member}</p>
@@ -138,7 +138,7 @@ const StudentDashboard = () => {
       
       {/* Assessments */}
       <div>
-        <h2 className="text-xl font-bold mt-6 mb-4 text-[#1a98e6]">My Assessments</h2>
+        <h2 className="text-xl font-bold mt-6 mb-4 text-[#33C3F0]">My Assessments</h2>
         <div className="space-y-5">
           {assessments.map((assessment) => (
             <Card key={assessment.id} className="card-hover shadow-md">
@@ -146,7 +146,7 @@ const StudentDashboard = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <CardTitle className="flex items-center">
-                      <span className="bg-[#1a98e6] text-white text-xs px-2 py-1 rounded mr-2">
+                      <span className="bg-[#33C3F0] text-white text-xs px-2 py-1 rounded mr-2">
                         {assessment.type}
                       </span>
                       {assessment.subject}
@@ -167,7 +167,7 @@ const StudentDashboard = () => {
                       </span>
                     )}
                     {assessment.status === "upcoming" && (
-                      <span className="inline-flex items-center bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">
+                      <span className="inline-flex items-center bg-[#33C3F0]/20 text-[#33C3F0] text-xs px-2 py-1 rounded">
                         <AlertCircle className="h-3 w-3 mr-1" /> Upcoming
                       </span>
                     )}
@@ -178,22 +178,22 @@ const StudentDashboard = () => {
                 <div className="flex flex-col gap-4">
                   <div className="flex flex-wrap gap-4">
                     <div className="bg-sky-50 p-3 rounded-lg flex-1">
-                      <p className="text-sm font-medium text-[#1a98e6]">Deadline</p>
+                      <p className="text-sm font-medium text-[#33C3F0]">Deadline</p>
                       <p className="text-sm">{assessment.deadline}</p>
                     </div>
                     
                     {assessment.status === "completed" && (
                       <div className="bg-sky-50 p-3 rounded-lg flex-1">
-                        <p className="text-sm font-medium text-[#1a98e6]">Submitted on</p>
+                        <p className="text-sm font-medium text-[#33C3F0]">Submitted on</p>
                         <p className="text-sm">{assessment.submissionDate}</p>
                       </div>
                     )}
                     
                     <div className="bg-sky-50 p-3 rounded-lg flex-1">
-                      <p className="text-sm font-medium text-[#1a98e6]">Questions</p>
+                      <p className="text-sm font-medium text-[#33C3F0]">Questions</p>
                       <Button 
                         variant="link" 
-                        className="text-[#1a98e6] p-0 h-auto" 
+                        className="text-[#33C3F0] p-0 h-auto" 
                         onClick={() => setSelectedAssessment(selectedAssessment === assessment.id ? null : assessment.id)}
                       >
                         {selectedAssessment === assessment.id ? 'Hide Questions' : 'View Questions'}
@@ -203,7 +203,7 @@ const StudentDashboard = () => {
                   
                   {selectedAssessment === assessment.id && (
                     <div className="bg-white p-4 rounded-lg shadow-inner">
-                      <h4 className="font-medium text-[#1a98e6] mb-2">Assessment Questions:</h4>
+                      <h4 className="font-medium text-[#33C3F0] mb-2">Assessment Questions:</h4>
                       <ul className="list-disc pl-5 space-y-1">
                         {assessment.questions.map((question, index) => (
                           <li key={index} className="text-sm">{question}</li>

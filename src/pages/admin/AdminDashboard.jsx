@@ -38,7 +38,7 @@ const AdminDashboard = () => {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#1a98e6]">Admin Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#33C3F0]">Admin Dashboard</h1>
           <p className="text-muted-foreground">
             Welcome back to Vignan's Mid Exam Evaluation System
           </p>
@@ -58,10 +58,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Classes</CardTitle>
-            <BookOpen className="h-5 w-5 text-[#1a98e6]" />
+            <BookOpen className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.totalClasses}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.totalClasses}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Active classes this semester
             </p>
@@ -70,10 +70,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Groups</CardTitle>
-            <Users className="h-5 w-5 text-[#1a98e6]" />
+            <Users className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.totalGroups}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.totalGroups}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Across all classes
             </p>
@@ -82,10 +82,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Students</CardTitle>
-            <User className="h-5 w-5 text-[#1a98e6]" />
+            <User className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.totalStudents}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.totalStudents}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Total enrolled students
             </p>
@@ -94,10 +94,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Pending Assessments</CardTitle>
-            <FileText className="h-5 w-5 text-[#1a98e6]" />
+            <FileText className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.pendingAssessments}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.pendingAssessments}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Awaiting submission
             </p>
@@ -106,10 +106,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Submitted</CardTitle>
-            <Upload className="h-5 w-5 text-[#1a98e6]" />
+            <Upload className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.submittedAssessments}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.submittedAssessments}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Submissions received
             </p>
@@ -118,10 +118,10 @@ const AdminDashboard = () => {
         <Card className="card-hover">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">Pending Reviews</CardTitle>
-            <CheckCircle className="h-5 w-5 text-[#1a98e6]" />
+            <CheckCircle className="h-5 w-5 text-[#33C3F0]" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-[#1a98e6]">{stats.pendingReviews}</div>
+            <div className="text-3xl font-bold text-[#33C3F0]">{stats.pendingReviews}</div>
             <p className="text-xs text-muted-foreground mt-1">
               Awaiting your review
             </p>
@@ -134,7 +134,7 @@ const AdminDashboard = () => {
         {/* Documents */}
         <Card className="card-hover">
           <CardHeader>
-            <CardTitle>Uploaded Documents</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Uploaded Documents</CardTitle>
             <CardDescription>
               Assessment materials and submissions
             </CardDescription>
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
               {documentFiles.map((file) => (
                 <div key={file.id} className="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
                   <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${file.type === 'pdf' ? 'bg-red-100 text-red-600' : 'bg-blue-100 text-blue-600'}`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${file.type === 'pdf' ? 'bg-red-100 text-red-600' : 'bg-[#33C3F0]/20 text-[#33C3F0]'}`}>
                       <FileText className="h-5 w-5" />
                     </div>
                     <div className="ml-3">
@@ -169,7 +169,7 @@ const AdminDashboard = () => {
         {/* Recent Submissions */}
         <Card className="card-hover">
           <CardHeader>
-            <CardTitle>Recent Submissions</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Recent Submissions</CardTitle>
             <CardDescription>
               Latest student group submissions
             </CardDescription>
@@ -202,7 +202,7 @@ const AdminDashboard = () => {
       {/* Upcoming Deadlines */}
       <Card className="card-hover">
         <CardHeader>
-          <CardTitle>Upcoming Deadlines</CardTitle>
+          <CardTitle className="text-[#33C3F0]">Upcoming Deadlines</CardTitle>
           <CardDescription>
             Assessment deadlines for the next 7 days
           </CardDescription>
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
             {upcomingDeadlines.map(deadline => (
               <div key={deadline.id} className="flex flex-col p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all">
                 <div className="flex items-center mb-3">
-                  <div className="bg-[#1a98e6] text-white text-xs px-2 py-1 rounded-full">
+                  <div className="bg-[#33C3F0] text-white text-xs px-2 py-1 rounded-full">
                     {deadline.assessmentType}
                   </div>
                   <div className="ml-2 text-sm text-muted-foreground">
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
                 </div>
                 <p className="font-medium">{deadline.subject}</p>
                 <div className="mt-auto pt-2 text-sm">
-                  <p className="bg-sky-100 text-[#1a98e6] px-2 py-1 rounded text-center">
+                  <p className="bg-sky-50 text-[#33C3F0] px-2 py-1 rounded text-center">
                     {deadline.deadline}
                   </p>
                 </div>

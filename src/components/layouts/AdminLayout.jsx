@@ -57,47 +57,47 @@ const AdminLayout = () => {
         <nav className="mt-6 px-4">
           <ul className="space-y-2">
             <li>
-              <Link to="/admin/dashboard" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/dashboard" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <Home className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Dashboard</span>}
               </Link>
             </li>
             <li>
-              <Link to="/admin/classes" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/classes" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <BookOpen className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Classes</span>}
               </Link>
             </li>
             <li>
-              <Link to="/admin/groups" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/groups" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <Users className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Groups</span>}
               </Link>
             </li>
             <li>
-              <Link to="/admin/assessments" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/assessments" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <FileText className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Assessments</span>}
               </Link>
             </li>
             <li>
-              <Link to="/admin/reports" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/reports" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <BarChart4 className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Reports</span>}
               </Link>
             </li>
             <li>
-              <Link to="/admin/settings" className={`flex items-center p-2 rounded-lg hover:bg-blue-800 transition-colors ${!sidebarOpen && 'justify-center'}`}>
+              <Link to="/admin/settings" className={`flex items-center p-2 rounded-lg hover:bg-[#1eaddc] transition-colors ${!sidebarOpen && 'justify-center'}`}>
                 <Settings className="h-5 w-5" /> 
                 {sidebarOpen && <span className="ml-3">Settings</span>}
               </Link>
             </li>
           </ul>
         </nav>
-        <div className={`mt-auto p-4 border-t border-blue-800 ${!sidebarOpen && 'flex justify-center'}`}>
+        <div className={`mt-auto p-4 border-t border-[#1eaddc] ${!sidebarOpen && 'flex justify-center'}`}>
           <Button 
             variant="ghost" 
-            className={`text-white hover:bg-blue-800 hover:text-white ${sidebarOpen ? 'w-full justify-start' : 'w-10 h-10 p-0'}`}
+            className={`text-white hover:bg-[#1eaddc] hover:text-white ${sidebarOpen ? 'w-full justify-start' : 'w-10 h-10 p-0'}`}
             onClick={handleLogout}
           >
             <LogOut className={`h-5 w-5 ${sidebarOpen && 'mr-2'}`} /> 
@@ -107,7 +107,7 @@ const AdminLayout = () => {
       </aside>
       
       {/* Main content */}
-      <main className={`flex-1 p-6 bg-sky-50 ${sidebarOpen ? 'content-with-sidebar-expanded' : 'content-with-sidebar'}`}>
+      <main className={`flex-1 p-6 bg-white ${sidebarOpen ? 'content-with-sidebar-expanded' : 'content-with-sidebar'}`}>
         <Outlet />
       </main>
     </div>

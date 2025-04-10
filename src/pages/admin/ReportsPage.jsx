@@ -31,7 +31,7 @@ const ReportsPage = () => {
     { name: 'Not Submitted', value: 10 },
   ];
   
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+  const COLORS = ['#33C3F0', '#1eaddc', '#0e86d4'];
   
   const timelineData = [
     { month: 'Jun', submissions: 20 },
@@ -46,7 +46,7 @@ const ReportsPage = () => {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[#1a98e6]">Reports & Analytics</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-[#33C3F0]">Reports & Analytics</h1>
           <p className="text-muted-foreground">
             Track student performance and submission statistics
           </p>
@@ -67,7 +67,7 @@ const ReportsPage = () => {
         {/* Submission Status */}
         <Card className="card-hover shadow-md">
           <CardHeader>
-            <CardTitle className="text-[#1a98e6]">Submission Status</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Submission Status</CardTitle>
             <CardDescription>Overall submission performance</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -97,7 +97,7 @@ const ReportsPage = () => {
         {/* Class Performance */}
         <Card className="card-hover shadow-md">
           <CardHeader>
-            <CardTitle className="text-[#1a98e6]">Class Performance</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Class Performance</CardTitle>
             <CardDescription>Average score by class</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -116,7 +116,7 @@ const ReportsPage = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="average" fill="#1a98e6" />
+                <Bar dataKey="average" fill="#33C3F0" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -125,7 +125,7 @@ const ReportsPage = () => {
         {/* T1, T2, T3 Comparison */}
         <Card className="card-hover shadow-md">
           <CardHeader>
-            <CardTitle className="text-[#1a98e6]">Assessment Comparison</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Assessment Comparison</CardTitle>
             <CardDescription>T1, T2, T3 submission rates by subject</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -144,9 +144,9 @@ const ReportsPage = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Bar dataKey="t1" fill="#0088FE" name="T1" />
-                <Bar dataKey="t2" fill="#00C49F" name="T2" />
-                <Bar dataKey="t3" fill="#FFBB28" name="T3" />
+                <Bar dataKey="t1" fill="#33C3F0" name="T1" />
+                <Bar dataKey="t2" fill="#1eaddc" name="T2" />
+                <Bar dataKey="t3" fill="#0e86d4" name="T3" />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
@@ -155,7 +155,7 @@ const ReportsPage = () => {
         {/* Submission Timeline */}
         <Card className="card-hover shadow-md">
           <CardHeader>
-            <CardTitle className="text-[#1a98e6]">Submission Timeline</CardTitle>
+            <CardTitle className="text-[#33C3F0]">Submission Timeline</CardTitle>
             <CardDescription>Monthly submission trend</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
@@ -174,7 +174,7 @@ const ReportsPage = () => {
                 <YAxis />
                 <Tooltip />
                 <Legend />
-                <Line type="monotone" dataKey="submissions" stroke="#1a98e6" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="submissions" stroke="#33C3F0" activeDot={{ r: 8 }} />
               </LineChart>
             </ResponsiveContainer>
           </CardContent>
@@ -183,7 +183,7 @@ const ReportsPage = () => {
       
       <Card className="card-hover shadow-md">
         <CardHeader>
-          <CardTitle className="text-[#1a98e6]">Report Summary</CardTitle>
+          <CardTitle className="text-[#33C3F0]">Report Summary</CardTitle>
           <CardDescription>Key insights from the data</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -14,17 +14,17 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* Updated primary color to sky blue */
-    --primary: 199 89% 48%;
+    /* Updated primary color to sky blue (#33C3F0) */
+    --primary: 196 88% 57%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 199 89% 48%;
+    --secondary: 196 88% 57%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 199 89% 48%;
+    --accent: 196 88% 57%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
@@ -47,16 +47,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 199 89% 48%;
+    --primary: 196 88% 57%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 199 89% 48%;
+    --secondary: 196 88% 57%;
     --secondary-foreground: 222.2 47.4% 11.2%;
 
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 199 89% 48%;
+    --accent: 196 88% 57%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -79,7 +79,7 @@
 
 @layer components {
   .sidebar {
-    @apply fixed top-0 left-0 h-screen bg-[#1a98e6] text-white transition-all duration-300 ease-in-out z-50 shadow-lg;
+    @apply fixed top-0 left-0 h-screen bg-[#33C3F0] text-white transition-all duration-300 ease-in-out z-50 shadow-lg;
   }
   
   .sidebar-collapsed {
@@ -99,7 +99,7 @@
   }
   
   .menu-trigger {
-    @apply fixed top-4 left-4 z-50 bg-[#1a98e6] text-white p-3 rounded-full shadow-lg hover:bg-[#0e86d4] transition-all;
+    @apply fixed top-4 left-4 z-50 bg-[#33C3F0] text-white p-3 rounded-full shadow-lg hover:bg-[#1eaddc] transition-all;
   }
   
   .card-hover {
@@ -107,11 +107,11 @@
   }
   
   .btn-sky {
-    @apply bg-[#1a98e6] hover:bg-[#0e86d4] text-white;
+    @apply bg-[#33C3F0] hover:bg-[#1eaddc] text-white;
   }
   
   .gradient-bg {
-    @apply bg-gradient-to-br from-[#1a98e6] to-[#0e86d4];
+    @apply bg-gradient-to-br from-[#33C3F0] to-[#1eaddc];
   }
   
   .glass-effect {
