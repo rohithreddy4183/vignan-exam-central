@@ -20,6 +20,18 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+// Create uploads directories for different content types
+const questionDir = path.join(uploadDir, 'questions');
+const submissionDir = path.join(uploadDir, 'submissions');
+const sampleDir = path.join(uploadDir, 'sample');
+
+// Ensure all required directories exist
+[questionDir, submissionDir, sampleDir].forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+});
+
 // MongoDB Connection
 mongoose.connect('mongodb://localhost:27017/vignanExams', {
   useNewUrlParser: true,
@@ -37,7 +49,13 @@ const userSchema = new mongoose.Schema({
   regNumber: String,
   email: String,
   class: String,
-  group: String
+  group: String,
+  facultyId: String,
+  department: String,
+  teachingAssignments: [{
+    class: String,
+    subject: String
+  }]
 });
 
 const groupSchema = new mongoose.Schema({
@@ -46,18 +64,40 @@ const groupSchema = new mongoose.Schema({
   members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 });
 
-const assessmentSchema = new mongoose.Schema({
+const classSchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  department: String,
+  batch: String,
+  section: String,
+  students: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
+});
+
+const subjectSchema = new mongoose.Schema({
+  code: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  department: String
+});
+
+const questionSchema = new mongoose.Schema({
   type: { type: String, enum: ['T1', 'T2', 'T3'], required: true },
   title: { type: String, required: true },
   subject: { type: String, required: true },
   class: { type: String, required: true },
   deadline: { type: Date, required: true },
   description: String,
-  questions: [String]
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  uploadDate: { type: Date, default: Date.now },
+  file: {
+    filename: String,
+    path: String,
+    originalName: String,
+    mimetype: String,
+    size: Number
+  }
 });
 
 const submissionSchema = new mongoose.Schema({
-  assessment: { type: mongoose.Schema.Types.ObjectId, ref: 'Assessment', required: true },
+  assessment: { type: mongoose.Schema.Types.ObjectId, ref: 'Question', required: true },
   group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true },
   files: [{
     filename: String,
@@ -68,24 +108,30 @@ const submissionSchema = new mongoose.Schema({
     uploadDate: Date
   }],
   submissionDate: { type: Date, default: Date.now },
-  status: { type: String, enum: ['pending', 'reviewed'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'reviewed', 'rejected'], default: 'pending' },
   feedback: String,
-  grade: Number
+  grade: Number,
+  reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  reviewDate: Date
 });
 
 // Create models
 const User = mongoose.model('User', userSchema);
 const Group = mongoose.model('Group', groupSchema);
-const Assessment = mongoose.model('Assessment', assessmentSchema);
+const Class = mongoose.model('Class', classSchema);
+const Subject = mongoose.model('Subject', subjectSchema);
+const Question = mongoose.model('Question', questionSchema);
 const Submission = mongoose.model('Submission', submissionSchema);
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/')
+    const { fileType } = req.body;
+    const uploadPath = fileType === 'question' ? questionDir : submissionDir;
+    cb(null, uploadPath);
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname)
+    cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
@@ -112,7 +158,10 @@ app.post('/api/auth/login', async (req, res) => {
         role: user.role,
         regNumber: user.regNumber,
         class: user.class,
-        group: user.group
+        group: user.group,
+        facultyId: user.facultyId,
+        department: user.department,
+        teachingAssignments: user.teachingAssignments
       };
       
       return res.json({ success: true, user: userData });
@@ -125,7 +174,40 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// File upload endpoint
+// Question upload endpoint
+app.post('/api/questions/upload', upload.single('file'), async (req, res) => {
+  try {
+    const { type, title, subject, className, deadline, description, facultyId } = req.body;
+    const file = req.file;
+
+    const faculty = await User.findOne({ facultyId });
+    
+    const question = new Question({
+      type,
+      title,
+      subject,
+      class: className,
+      deadline,
+      description,
+      uploadedBy: faculty ? faculty._id : null,
+      file: {
+        filename: file.filename,
+        path: file.path,
+        originalName: file.originalname,
+        mimetype: file.mimetype,
+        size: file.size
+      }
+    });
+    
+    await question.save();
+    res.json({ success: true, question });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Submission upload endpoint
 app.post('/api/submissions/upload', upload.array('files', 5), async (req, res) => {
   try {
     const { assessmentId, groupId } = req.body;
@@ -154,24 +236,176 @@ app.post('/api/submissions/upload', upload.array('files', 5), async (req, res) =
   }
 });
 
-// Get assessments for a class
-app.get('/api/assessments/class/:className', async (req, res) => {
+// Get questions by class
+app.get('/api/questions/class/:className', async (req, res) => {
   try {
-    const assessments = await Assessment.find({ class: req.params.className });
-    res.json(assessments);
+    const questions = await Question.find({ class: req.params.className })
+      .sort({ uploadDate: -1 })
+      .populate('uploadedBy', 'name');
+    
+    res.json(questions);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Get submissions for an assessment
-app.get('/api/submissions/assessment/:assessmentId', async (req, res) => {
+// Get questions by faculty
+app.get('/api/questions/faculty/:facultyId', async (req, res) => {
   try {
-    const submissions = await Submission.find({ assessment: req.params.assessmentId })
+    const faculty = await User.findOne({ facultyId: req.params.facultyId });
+    
+    if (!faculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+    
+    const questions = await Question.find({ uploadedBy: faculty._id })
+      .sort({ uploadDate: -1 });
+    
+    res.json(questions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get submissions for faculty based on classes they teach
+app.get('/api/submissions/faculty/:facultyId', async (req, res) => {
+  try {
+    const faculty = await User.findOne({ facultyId: req.params.facultyId });
+    
+    if (!faculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+    
+    // Get all classes the faculty teaches
+    const teachingClasses = faculty.teachingAssignments.map(ta => ta.class);
+    
+    // Find all questions for those classes
+    const questions = await Question.find({ class: { $in: teachingClasses } });
+    const questionIds = questions.map(q => q._id);
+    
+    // Find all submissions for those questions
+    const submissions = await Submission.find({ assessment: { $in: questionIds } })
       .populate('group')
-      .exec();
+      .populate('assessment')
+      .sort({ submissionDate: -1 });
+    
     res.json(submissions);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Add review to a submission
+app.post('/api/submissions/:submissionId/review', async (req, res) => {
+  try {
+    const { grade, feedback, status, facultyId } = req.body;
+    
+    const faculty = await User.findOne({ facultyId });
+    
+    if (!faculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+    
+    const submission = await Submission.findById(req.params.submissionId);
+    
+    if (!submission) {
+      return res.status(404).json({ message: 'Submission not found' });
+    }
+    
+    submission.grade = grade;
+    submission.feedback = feedback;
+    submission.status = status;
+    submission.reviewedBy = faculty._id;
+    submission.reviewDate = new Date();
+    
+    await submission.save();
+    
+    res.json({ success: true, submission });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get all classes
+app.get('/api/classes', async (req, res) => {
+  try {
+    const classes = await Class.find().sort({ name: 1 });
+    res.json(classes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get all subjects
+app.get('/api/subjects', async (req, res) => {
+  try {
+    const subjects = await Subject.find().sort({ name: 1 });
+    res.json(subjects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Add a class
+app.post('/api/classes', async (req, res) => {
+  try {
+    const { name, department, batch, section } = req.body;
+    
+    const newClass = new Class({
+      name,
+      department,
+      batch,
+      section
+    });
+    
+    await newClass.save();
+    res.json({ success: true, class: newClass });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Add a subject
+app.post('/api/subjects', async (req, res) => {
+  try {
+    const { code, name, department } = req.body;
+    
+    const newSubject = new Subject({
+      code,
+      name,
+      department
+    });
+    
+    await newSubject.save();
+    res.json({ success: true, subject: newSubject });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Assign faculty to classes and subjects
+app.post('/api/faculty/assign', async (req, res) => {
+  try {
+    const { facultyId, assignments } = req.body;
+    
+    const faculty = await User.findOne({ facultyId });
+    
+    if (!faculty) {
+      return res.status(404).json({ message: 'Faculty not found' });
+    }
+    
+    faculty.teachingAssignments = assignments;
+    await faculty.save();
+    
+    res.json({ success: true, faculty });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -192,6 +426,21 @@ async function seedInitialData() {
         role: 'admin',
         name: 'Admin User',
         email: 'admin@vignan.ac.in'
+      });
+      
+      // Create faculty user
+      const faculty = await User.create({
+        username: 'faculty',
+        password: 'faculty123',
+        role: 'faculty',
+        name: 'Dr. Smith',
+        email: 'smith@vignan.ac.in',
+        facultyId: 'FAC2023001',
+        department: 'Computer Science',
+        teachingAssignments: [
+          { class: 'CSE-A', subject: 'Web Technologies' },
+          { class: 'CSE-B', subject: 'Database Systems' }
+        ]
       });
       
       // Create student users
@@ -215,6 +464,35 @@ async function seedInitialData() {
         email: 'jane.smith@vignan.ac.in'
       });
       
+      // Create classes
+      const cseA = await Class.create({
+        name: 'CSE-A',
+        department: 'Computer Science',
+        batch: '2021-2025',
+        section: 'A',
+        students: [student1._id, student2._id]
+      });
+      
+      const cseB = await Class.create({
+        name: 'CSE-B',
+        department: 'Computer Science',
+        batch: '2021-2025',
+        section: 'B'
+      });
+      
+      // Create subjects
+      const webTech = await Subject.create({
+        code: 'CSE301',
+        name: 'Web Technologies',
+        department: 'Computer Science'
+      });
+      
+      const dbSystems = await Subject.create({
+        code: 'CSE302',
+        name: 'Database Systems',
+        department: 'Computer Science'
+      });
+      
       // Create sample group
       const group = await Group.create({
         name: 'Group A-3',
@@ -223,46 +501,55 @@ async function seedInitialData() {
       });
       
       // Create sample assessments
-      const t1 = await Assessment.create({
+      const t1 = await Question.create({
         type: 'T1',
         title: 'Implement a responsive web application using React',
         subject: 'Web Technologies',
         class: 'CSE-A',
         deadline: new Date('2025-05-15'),
         description: 'Create a responsive React application with at least 3 pages and proper routing.',
-        questions: [
-          'Implement a login page with form validation',
-          'Create a dashboard with at least 3 widgets showing different data visualizations',
-          'Implement responsive design that works on mobile and desktop'
-        ]
+        uploadedBy: faculty._id,
+        file: {
+          filename: 'T1_WebTech_CSE-A.pdf',
+          path: 'uploads/sample/SampleT1Questions.pdf',
+          originalName: 'T1_WebTech_CSE-A.pdf',
+          mimetype: 'application/pdf',
+          size: 250000
+        }
       });
       
-      const t2 = await Assessment.create({
+      const t2 = await Question.create({
         type: 'T2',
         title: 'Add user authentication and database integration to your web app',
         subject: 'Web Technologies',
         class: 'CSE-A',
         deadline: new Date('2025-05-25'),
         description: 'Extend your T1 application by adding authentication and database functionality.',
-        questions: [
-          'Implement JWT-based authentication',
-          'Add database connection for persistent data storage',
-          'Create a user profile page with editable fields'
-        ]
+        uploadedBy: faculty._id,
+        file: {
+          filename: 'T2_WebTech_CSE-A.pdf',
+          path: 'uploads/sample/T2Extension.pdf',
+          originalName: 'T2_WebTech_CSE-A.pdf',
+          mimetype: 'application/pdf',
+          size: 280000
+        }
       });
       
-      const t3 = await Assessment.create({
+      const t3 = await Question.create({
         type: 'T3',
         title: 'Create a presentation and IEEE paper on your web application',
         subject: 'Web Technologies',
         class: 'CSE-A',
         deadline: new Date('2025-06-05'),
         description: 'Present your application and document it according to IEEE format.',
-        questions: [
-          'Create a 10-slide presentation about your application',
-          'Write a 5-page IEEE format paper documenting your development process',
-          'Prepare a 5-minute demo video showcasing the application features'
-        ]
+        uploadedBy: faculty._id,
+        file: {
+          filename: 'SamplePresentation.pptx',
+          path: 'uploads/sample/SamplePresentation.pptx',
+          originalName: 'SamplePresentation.pptx',
+          mimetype: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+          size: 350000
+        }
       });
       
       console.log('Initial data seeded successfully!');

@@ -10,12 +10,19 @@ import NotFound from "./pages/NotFound";
 
 // Layouts
 import AdminLayout from "./components/layouts/AdminLayout";
+import FacultyLayout from "./components/layouts/FacultyLayout";
 import StudentLayout from "./components/layouts/StudentLayout";
 
 // Admin pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import GroupManagement from "./pages/admin/GroupManagement";
 import ReportsPage from "./pages/admin/ReportsPage";
+
+// Faculty pages
+import FacultyDashboard from "./pages/faculty/FacultyDashboard";
+import QuestionsPage from "./pages/faculty/QuestionsPage";
+import UploadQuestionPage from "./pages/faculty/UploadQuestionPage";
+import SubmissionsPage from "./pages/faculty/SubmissionsPage";
 
 // Student pages
 import StudentDashboard from "./pages/student/StudentDashboard";
@@ -42,6 +49,14 @@ const App = () => (
               <Route path="classes" element={<div className="p-4">Classes page coming soon</div>} />
               <Route path="assessments" element={<div className="p-4">Assessments page coming soon</div>} />
               <Route path="settings" element={<div className="p-4">Settings page coming soon</div>} />
+            </Route>
+
+            {/* Faculty Routes */}
+            <Route path="/faculty" element={<FacultyLayout />}>
+              <Route path="dashboard" element={<FacultyDashboard />} />
+              <Route path="questions" element={<QuestionsPage />} />
+              <Route path="upload" element={<UploadQuestionPage />} />
+              <Route path="submissions" element={<SubmissionsPage />} />
             </Route>
 
             {/* Student Routes */}

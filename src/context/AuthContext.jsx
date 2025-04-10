@@ -22,6 +22,16 @@ export const AuthProvider = ({ children }) => {
           name: 'Admin User',
           role: 'admin',
         });
+      } else if (userRole === 'faculty') {
+        setUser({
+          id: 'faculty-1',
+          name: 'Dr. Smith',
+          role: 'faculty',
+          facultyId: 'FAC2023001',
+          department: 'Computer Science',
+          subjects: ['Web Technologies', 'Database Systems'],
+          classes: ['CSE-A', 'CSE-B']
+        });
       } else if (userRole === 'student') {
         setUser({
           id: 'student-1',
@@ -52,6 +62,22 @@ export const AuthProvider = ({ children }) => {
         
         localStorage.setItem('isAuthenticated', 'true');
         localStorage.setItem('userRole', 'admin');
+        setUser(user);
+        return { success: true, user };
+        
+      } else if (username === 'faculty' && password === 'faculty123') {
+        const user = {
+          id: 'faculty-1',
+          name: 'Dr. Smith',
+          role: 'faculty',
+          facultyId: 'FAC2023001',
+          department: 'Computer Science',
+          subjects: ['Web Technologies', 'Database Systems'],
+          classes: ['CSE-A', 'CSE-B']
+        };
+        
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('userRole', 'faculty');
         setUser(user);
         return { success: true, user };
         

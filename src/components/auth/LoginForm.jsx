@@ -27,6 +27,8 @@ const LoginForm = () => {
         
         if (result.user.role === 'admin') {
           navigate('/admin/dashboard');
+        } else if (result.user.role === 'faculty') {
+          navigate('/faculty/dashboard');
         } else if (result.user.role === 'student') {
           navigate('/student/dashboard');
         }
@@ -44,7 +46,7 @@ const LoginForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto shadow-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl text-center font-bold text-[#1a98e6]">Login</CardTitle>
+        <CardTitle className="text-2xl text-center font-bold text-[#33C3F0]">Login</CardTitle>
         <CardDescription className="text-center">
           Enter your credentials to access your account
         </CardDescription>
@@ -55,7 +57,7 @@ const LoginForm = () => {
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
-              placeholder="Username or Registration Number"
+              placeholder="Username, Faculty ID, or Registration Number"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -64,7 +66,7 @@ const LoginForm = () => {
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <a href="#" className="text-xs text-[#1a98e6] hover:underline">
+              <a href="#" className="text-xs text-[#33C3F0] hover:underline">
                 Forgot password?
               </a>
             </div>
@@ -81,11 +83,12 @@ const LoginForm = () => {
           <div className="text-xs text-muted-foreground">
             <p>Sample Credentials:</p>
             <p>Admin: username "admin", password "admin123"</p>
+            <p>Faculty: username "faculty", password "faculty123"</p>
             <p>Student: username "21BCE7777", password "student123"</p>
           </div>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full btn-sky" disabled={isLoading}>
+          <Button type="submit" className="w-full bg-[#33C3F0] hover:bg-[#1eaddc] text-white" disabled={isLoading}>
             {isLoading ? "Logging in..." : "Login"}
           </Button>
         </CardFooter>
